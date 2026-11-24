@@ -1,0 +1,284 @@
+GET http://localhost:3000/alumnos
+
+###
+GET http://localhost:3000/alumnos/1002
+
+###
+POST http://localhost:3000/alumnos
+Content-Type: application/json
+
+{
+    "legajo": 1023,
+    "nombre": "Ramón",
+    "carrera": "Sistemas",
+    "correo": "ramon@mail.com"
+}
+###
+PUT http://localhost:3000/alumnos/1002
+Content-Type: application/json
+
+{
+    "nombre": "Juan Carlos",
+    "carrera": "Programación",
+    "correo": "juan@mail.com"
+}
+
+###
+DELETE http://localhost:3000/alumnos/1021
+
+###
+POST http://localhost:3000/alumnos
+Content-Type: application/json
+
+{
+    "id": 5,
+    "nombre": "Rocío",
+    "carrera": "Programación"
+}
+
+###
+GET http://localhost:3000/docentes
+
+###
+POST http://localhost:3000/docentes
+Content-Type: application/json
+
+{
+    "dni": 5222311,
+    "nombre": "Rocío",
+    "especialidad": "Programación",
+    "correo": "rocio@mail.com"
+}
+
+###
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@sga.com",
+    "password":"ClaveDePrueba123!"
+}
+
+###
+GET http://localhost:3000/alumnos
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhZThjYmUyZGFlOGEwMzFiMGJhNDJiZiIsInJvbCI6ImFkbWluIiwiaWF0IjoxNzk0NTA3NzA4LCJleHAiOjE3OTQ1MTEzMDh9.vJbyQWwW8y6YTBU2EKEUVbTn87wJxZqYwzKZQuy0pnY
+
+
+### //1_ Listado con la colección vacía → 200//
+GET http://localhost:3000/materias
+
+### //5_ Alta válida (PRG1) → 201//
+POST http://localhost:3000/materias
+Content-Type: application/json
+
+{
+    "codigo": "PRG1",
+    "nombre": "Programación I",
+    "descripcion": "Introducción a la programación",
+    "cargaHoraria": 96,
+    "estado": "activa"
+}
+
+### //2_ Más altas válidas → 201 cada una//
+POST http://localhost:3000/materias
+Content-Type: application/json
+
+{
+    "codigo": "PRG3",
+    "nombre": "Programación III",
+    "descripcion": "Programación orientada a objetos",
+    "cargaHoraria": 96,
+    "estado": "activa"
+}
+
+###
+POST http://localhost:3000/materias
+Content-Type: application/json
+
+{
+    "codigo": "BD1",
+    "nombre": "Bases de Datos I",
+    "cargaHoraria": 64,
+    "estado": "inactiva"
+}
+
+### //2_ Verificar que aparezcan las 3 → 200//
+GET http://localhost:3000/materias
+
+### //3_ Consultar por código → 200//
+GET http://localhost:3000/materias/PRG1
+
+### //4_ Código inexistente → 404//
+GET http://localhost:3000/materias/NOEXISTE
+
+### //6_ Sin código → 400//
+POST http://localhost:3000/materias
+Content-Type: application/json
+
+{
+    "nombre": "Sin código",
+    "cargaHoraria": 40,
+    "estado": "activa"
+}
+
+### //7_ Sin nombre → 400//
+POST http://localhost:3000/materias
+Content-Type: application/json
+
+{
+    "codigo": "SN1",
+    "cargaHoraria": 40,
+    "estado": "activa"
+}
+
+### //7b_ Nombre compuesto solo por espacios → 400//
+POST http://localhost:3000/materias
+Content-Type: application/json
+
+{
+    "codigo": "ESP1",
+    "nombre": "   ",
+    "cargaHoraria": 40,
+    "estado": "activa"
+}
+
+### //8_ Sin carga horaria → 400//
+POST http://localhost:3000/materias
+Content-Type: application/json
+
+{
+    "codigo": "SC1",
+    "nombre": "Sin carga horaria",
+    "estado": "activa"
+}
+
+### //Descripción compuesta solo por espacios → 400//
+POST http://localhost:3000/materias
+Content-Type: application/json
+
+{
+    "codigo": "ESP2",
+    "nombre": "Descripción inválida",
+    "descripcion": "   ",
+    "cargaHoraria": 40,
+    "estado": "activa"
+}
+
+### //9a_ Carga horaria = 0 → 400//
+POST http://localhost:3000/materias
+Content-Type: application/json
+
+{
+    "codigo": "CH0",
+    "nombre": "Carga cero",
+    "cargaHoraria": 0,
+    "estado": "activa"
+}
+
+### //9b_ Carga horaria negativa → 400//
+POST http://localhost:3000/materias
+Content-Type: application/json
+
+{
+    "codigo": "CH1",
+    "nombre": "Carga negativa",
+    "cargaHoraria": -5,
+    "estado": "activa"
+}
+
+### //9c_ Carga horaria decimal → 400//
+POST http://localhost:3000/materias
+Content-Type: application/json
+
+{
+    "codigo": "CH2",
+    "nombre": "Carga decimal",
+    "cargaHoraria": 4.5,
+    "estado": "activa"
+}
+
+### //10_ Código duplicado → 409//
+POST http://localhost:3000/materias
+Content-Type: application/json
+
+{
+    "codigo": "PRG1",
+    "nombre": "Otro nombre distinto",
+    "cargaHoraria": 50,
+    "estado": "activa"
+}
+
+### //11_ Estado no permitido → 400//
+POST http://localhost:3000/materias
+Content-Type: application/json
+
+{
+    "codigo": "EST1",
+    "nombre": "Estado inválido",
+    "cargaHoraria": 50,
+    "estado": "pausada"
+}
+
+### //12_ Modificar nombre y descripción → 200//
+PUT http://localhost:3000/materias/PRG1
+Content-Type: application/json
+
+{
+    "nombre": "Programación Inicial",
+    "descripcion": "Descripción modificada"
+}
+
+### //13_ Modificar carga horaria y estado → 200//
+PUT http://localhost:3000/materias/PRG1
+Content-Type: application/json
+
+{
+    "cargaHoraria": 120,
+    "estado": "inactiva"
+}
+
+### //13b_ Conservar su propio código no es duplicado → 200//
+PUT http://localhost:3000/materias/PRG1
+Content-Type: application/json
+
+{
+    "codigo": "PRG1",
+    "nombre": "Programación Inicial"
+}
+
+### //13c_ Modificar con datos inválidos → 400//
+PUT http://localhost:3000/materias/PRG1
+Content-Type: application/json
+
+{
+    "cargaHoraria": -10,
+    "estado": "pausada"
+}
+
+### //14_ Modificar una materia inexistente → 404//
+PUT http://localhost:3000/materias/NOEXISTE
+Content-Type: application/json
+
+{
+    "nombre": "No existe"
+}
+
+### //15_ Cambiar el código por el de otra materia → 409//
+PUT http://localhost:3000/materias/BD1
+Content-Type: application/json
+
+{
+    "codigo": "PRG1"
+}
+
+### //16_ Eliminar una materia existente → 200//
+DELETE http://localhost:3000/materias/BD1
+
+### //16b_ Consultarla de nuevo → 404//
+GET http://localhost:3000/materias/BD1
+
+### //17_Eliminar una inexistente → 404//
+DELETE http://localhost:3000/materias/NOEXISTE
+
+### //18_ reflejar todos los cambios → 200//
+GET http://localhost:3000/materias
